@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1 class="centralizado">Alurapic</h1>
-        <p v-show="mensagem" class="cntralizado"> {{ mensagem }} </p>
+        <p v-show="mensagem" class="centralizado"> {{ mensagem }} </p>
         <input type="search" class="filtro" @input="filtro = $event.target.value" placeholder="filtre pelo título da foto">
         <ul class="lista-fotos">
         <li class="lista-fotos-item" v-for="foto of fotosComFiltro">
@@ -11,6 +11,12 @@
                 :url="foto.url" 
                 :titulo="foto.titulo"
               />
+              <router-link :to="{ name: 'altera', params: { id: foto._id } }">
+                <meu-botao 
+                  rotulo="Alterar" 
+                  tipo="button"
+                />
+              </router-link>  
               <meu-botao 
                 tipo="button" 
                 rotulo="Remover" 
@@ -61,7 +67,7 @@ export default {
 
     this.service = new FotoService(this.$resource);
     this.service.lista()
-      .then(fotos => this.fotos = fotos, err => console.log(err));
+      .then(fotos => this.fotos = fotos, err =>  this.mensagem = err.message);
   },
 
   methods: {
